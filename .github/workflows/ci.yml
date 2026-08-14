@@ -1,0 +1,20 @@
+name: CI
+on:
+  push:
+    branches: [master]
+  pull_request:
+    types: [opened, synchronize, reopened, ready_for_review]
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-java@v5
+        with: { distribution: temurin, java-version: "17", cache: gradle }
+      - uses: gradle/actions/wrapper-validation@v4
+      - run: chmod +x gradlew
+      - run: ./gradlew clean build --no-daemon
+      - uses: actions/upload-artifact@v4
+        with: { name: keycloak-discord-identity-provider, path: build/libs/keycloak-discord-identity-provider-*.jar }

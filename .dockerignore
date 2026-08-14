@@ -1,0 +1,7 @@
+.git
+.gradle
+build/**
+!build/
+!build/docker/
+!build/docker/keycloak-discord.jar
+src/test
