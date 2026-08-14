@@ -12,8 +12,10 @@ jobs:
       - uses: actions/setup-java@v5
         with: { distribution: temurin, java-version: "17", cache: gradle }
       - uses: gradle/actions/wrapper-validation@v4
-      - run: chmod +x gradlew
-      - run: ./gradlew clean build --no-daemon -Pversion="${GITHUB_REF_NAME#v}"
+      - name: Make Gradle Wrapper executable
+        run: chmod +x gradlew
+      - name: Build, unit test, and smoke test
+        run: ./gradlew clean build test -PwithSmoke --no-daemon -Pversion="${GITHUB_REF_NAME#v}"
       - run: sha256sum build/libs/keycloak-discord-identity-provider-*.jar > build/libs/keycloak-discord-identity-provider.jar.sha256
       - uses: softprops/action-gh-release@v2
         with:
